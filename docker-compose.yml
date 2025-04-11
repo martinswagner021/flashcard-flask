@@ -1,0 +1,35 @@
+services:
+  web:
+    build: .
+    volumes:
+      - ./app:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    env_file:
+      - ".env.dev"
+    restart: always
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - flask_app_data:/var/lib/postgresql/data
+    env_file:
+      - ".env.dev"
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    env_file:
+      - ".env.dev"
+
+volumes:
+  flask_app_data:
+  pgadmin_data:
